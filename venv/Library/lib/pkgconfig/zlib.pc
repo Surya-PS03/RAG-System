@@ -1,0 +1,13 @@
+prefix=S:/hackrx/venv/Library
+exec_prefix=S:/hackrx/venv/Library
+libdir=S:/hackrx/venv/Library/lib
+sharedlibdir=S:/hackrx/venv/Library/lib
+includedir=S:/hackrx/venv/Library/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.13
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}
