@@ -1,4 +1,4 @@
-chromadb
+faiss-cpu
 
 ollama
 pdfplumber 
@@ -6,9 +6,9 @@ pdfplumber
 langchain
 langchain-core
 langchain-community
-
 langchain_text_splitters
 langchain-ollama
+langchain-huggingface
 
 unstructured
 
