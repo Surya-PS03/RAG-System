@@ -6,7 +6,7 @@ from typing import List
 from dotenv import load_dotenv
 import os
 from urllib.parse import urlsplit
-from utils import parsing
+from utils import parsing,chunking
 app = FastAPI()
 
 load_dotenv()
@@ -57,8 +57,9 @@ def response(request: QueryRequest, token: str = Depends(authorize)):
         raise HTTPException(status_code=500,detail = "Can't extract the file content")
 
     parsed_doc = parsing.parser(file_path,filename)
+    chunks = chunking.chunker(parsed_doc)
 
-    return {"status": "success", "filename": filename,"parsed_doc": parsed_doc}
+    return {"status": "success", "filename": filename,"chunks":chunks}
 
 
 
