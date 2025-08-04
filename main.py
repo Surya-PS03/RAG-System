@@ -6,7 +6,7 @@ from typing import List
 from dotenv import load_dotenv
 import os
 from urllib.parse import urlsplit
-
+from utils import parsing
 app = FastAPI()
 
 load_dotenv()
@@ -56,8 +56,9 @@ def response(request: QueryRequest, token: str = Depends(authorize)):
     except:
         raise HTTPException(status_code=500,detail = "Can't extract the file content")
 
-    
-    return {"status": "success", "filename": filename}
+    parsed_doc = parsing.parser(file_path,filename)
+
+    return {"status": "success", "filename": filename,"parsed_doc": parsed_doc}
 
 
 
