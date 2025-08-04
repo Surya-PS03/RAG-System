@@ -5,6 +5,7 @@ import requests
 from typing import List
 from dotenv import load_dotenv
 import os
+from urllib.parse import urlsplit
 
 app = FastAPI()
 
@@ -14,14 +15,16 @@ bearer_token = os.getenv("BEARER_TOKEN")
 
 http_scheme = HTTPBearer()
 
+#User authorization from bearer token
 def authorize(token: HTTPAuthorizationCredentials = Depends(http_scheme)):
     if bearer_token != token.credentials:
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
-                            detail = "Unauthorize User",
+                            detail = "Unauthorized User",
                             headers={"WWW-Authenticate":"Bearer"})
     else:
         return bearer_token
 
+#API model
 class QueryRequest(BaseModel):
     documents: str
     questions: List[str]
@@ -29,11 +32,32 @@ class QueryRequest(BaseModel):
 
 @app.post("/hackrx/run")
 def response(request: QueryRequest, token: str = Depends(authorize)):
-    documents = request.documents
+    documents_url = request.documents
+    root = "hackrx/files"
+    os.makedirs(root,exist_ok = True)
+
+    #sending get request to the document url
     try:
-        resp = requests.get(documents)
+        resp = requests.get(documents_url)
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = f"Url is not working: str{e}")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = f"Url is not working: {str(e)}")
     
-    questions = request.questions
+    #extracting filename from url
+    url_split = urlsplit(documents_url) 
+    doc_path = url_split.path
+    filename = os.path.basename(doc_path)
+
+    #Creating a filepath and writing in it
+    try:
+        file_path = os.path.join(root,filename)
+
+        with open(file_path,'wb') as f:
+            f.write(resp.content)
+    except:
+        raise HTTPException(status_code=500,detail = "Can't extract the file content")
+
+    
+    return {"status": "success", "filename": filename}
+
+
 
