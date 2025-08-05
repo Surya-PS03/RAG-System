@@ -1,5 +1,5 @@
-from langchain.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_huggingface import HuggingFaceEmbeddings
 from fastapi import HTTPException,status
 
 def vectorize(chunks):
@@ -10,4 +10,3 @@ def vectorize(chunks):
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail = f"Database issue: {str(e)}")
     
-
