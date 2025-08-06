@@ -6,7 +6,7 @@ from typing import List
 from dotenv import load_dotenv
 import os
 from urllib.parse import urlsplit
-from utils import parsing,chunking,vectorizing,retrieving
+from utils import parsing,chunking,vectorizing,retrieving,output
 app = FastAPI()
 
 load_dotenv()
@@ -62,7 +62,8 @@ def response(request: QueryRequest, token: str = Depends(authorize)):
     chunks = chunking.chunker(parsed_doc)
     db = vectorizing.vectorize(chunks)
     contexts = {question: retrieving.retrieve(db = db,question=question) for question in questions}
-    return {"status": "success", "filename": filename,"context":contexts}
+    answers = output.responses(contexts)
+    return {"status": "success", "answers":answers}
 
 
 
