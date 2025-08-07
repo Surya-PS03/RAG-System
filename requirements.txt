@@ -1,13 +1,11 @@
 faiss-cpu
 
-ollama
 pdfplumber 
 
 langchain
 langchain-core
 langchain-community
 langchain_text_splitters
-langchain-ollama
 langchain-huggingface
 
 unstructured
@@ -21,3 +19,4 @@ elevenlabs
 fastapi
 uvicorn
 python-dotenv
+together

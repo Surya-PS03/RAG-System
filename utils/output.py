@@ -1,7 +1,8 @@
 from langchain.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama
-from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
+from utils.Wrapper.TogetherWrapper import TogetherWrapper
+from utils.Wrapper.langchainWrapper import LangchainWrapper
 def responses(query_context_map):
     
     template = """You are an expert assistant designed to extract accurate, concise, and context-grounded answers from official documents like insurance policies, contracts, or legal agreements.
@@ -25,8 +26,9 @@ def responses(query_context_map):
     Always aim for precision, factual consistency, and groundedness.
     """
     prompt = ChatPromptTemplate.from_template(template)
-    llm = ChatOllama(model = "llama3.1",temperature = 0)
-    
+    wrap = TogetherWrapper(model = "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free",temperature = 0)
+    llm = LangchainWrapper(wrap)
+
     answers = []
 
     chain = (prompt| llm | StrOutputParser())

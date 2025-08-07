@@ -1,10 +1,13 @@
+import os,sys
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from fastapi import HTTPException,FastAPI,Depends,status
 from fastapi.security import HTTPBearer,HTTPAuthorizationCredentials
 from pydantic import BaseModel
 import requests
 from typing import List
 from dotenv import load_dotenv
-import os
 from urllib.parse import urlsplit
 from utils import parsing,chunking,vectorizing,retrieving,output
 app = FastAPI()
@@ -14,6 +17,7 @@ load_dotenv()
 bearer_token = os.getenv("BEARER_TOKEN")
 
 http_scheme = HTTPBearer()
+
 
 #User authorization from bearer token
 def authorize(token: HTTPAuthorizationCredentials = Depends(http_scheme)):
@@ -63,7 +67,7 @@ def response(request: QueryRequest, token: str = Depends(authorize)):
     db = vectorizing.vectorize(chunks)
     contexts = {question: retrieving.retrieve(db = db,question=question) for question in questions}
     answers = output.responses(contexts)
-    return {"status": "success", "answers":answers}
+    return {"answers":answers}
 
 
 
