@@ -1,6 +1,5 @@
 from langchain.prompts import PromptTemplate
 from langchain.retrievers import MultiQueryRetriever
-from langchain_ollama import ChatOllama
 from utils.Wrapper.TogetherWrapper import TogetherWrapper
 from utils.Wrapper.langchainWrapper import LangchainWrapper
 def retrieve(db,question):
