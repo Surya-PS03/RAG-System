@@ -10,6 +10,7 @@ from typing import List
 from dotenv import load_dotenv
 from urllib.parse import urlsplit
 from utils import parsing,chunking,vectorizing,retrieving,output
+import uvicorn
 app = FastAPI()
 
 load_dotenv()
@@ -69,5 +70,8 @@ def response(request: QueryRequest, token: str = Depends(authorize)):
     answers = output.responses(contexts)
     return {"answers":answers}
 
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
 
 
