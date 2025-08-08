@@ -1,8 +1,7 @@
 from langchain.prompts import PromptTemplate
 from langchain.retrievers import MultiQueryRetriever
-from langchain_ollama import ChatOllama
 from utils.Wrapper.TogetherWrapper import TogetherWrapper
-from utils.Wrapper.langchainWrapper import LangchainWrapper
+from utils.Wrapper.langchainWrapper import LangchainWrapper 
 def retrieve(db,question):
 
     llm = TogetherWrapper(model = "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free",temperature = 0.0)
