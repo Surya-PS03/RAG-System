@@ -9,9 +9,8 @@ import requests
 from typing import List
 from dotenv import load_dotenv
 from urllib.parse import urlsplit
-from utils import parsing,chunking,vectorizing,retrieving,output
 import uvicorn
-app = FastAPI()
+from utils import parsing,chunking,vectorizing,retrieving,output
 
 load_dotenv()
 
@@ -19,6 +18,7 @@ bearer_token = os.getenv("BEARER_TOKEN")
 
 http_scheme = HTTPBearer()
 
+app = FastAPI()
 
 #User authorization from bearer token
 def authorize(token: HTTPAuthorizationCredentials = Depends(http_scheme)):
@@ -70,8 +70,13 @@ def response(request: QueryRequest, token: str = Depends(authorize)):
     answers = output.responses(contexts)
     return {"answers":answers}
 
+@app.get("/hackrx/run")
+def run_info():
+    return {"message": "Use POST with Authorization: Bearer <token> to access this endpoint"}
+
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+
+
 
 
