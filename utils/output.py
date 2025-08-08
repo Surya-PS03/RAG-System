@@ -1,5 +1,4 @@
 from langchain.prompts import ChatPromptTemplate
-from langchain_ollama import ChatOllama
 from langchain_core.output_parsers import StrOutputParser
 from utils.Wrapper.TogetherWrapper import TogetherWrapper
 from utils.Wrapper.langchainWrapper import LangchainWrapper
