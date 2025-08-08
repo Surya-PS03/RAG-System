@@ -6,13 +6,13 @@ langchain-core
 langchain>=0.2.10
 langchain-community>=0.2.10
 langchain_text_splitters
+langchain-huggingface
 
 unstructured
 
 unstructured[all-docs]
 fastembed
 pikepdf
-sentence-transformers
 elevenlabs
 
 fastapi
