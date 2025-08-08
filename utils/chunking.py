@@ -4,7 +4,7 @@ from fastapi import HTTPException,status
 def chunker(parsed_doc):
 
     try:
-        splitter = RecursiveCharacterTextSplitter(chunk_size = 800,chunk_overlap = 100)
+        splitter = RecursiveCharacterTextSplitter(chunk_size = 400,chunk_overlap = 50)
         chunks = splitter.split_documents(parsed_doc)
         return chunks
     except Exception as e:

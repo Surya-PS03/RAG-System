@@ -4,7 +4,7 @@ from utils.Wrapper.TogetherWrapper import TogetherWrapper
 from utils.Wrapper.langchainWrapper import LangchainWrapper
 def retrieve(db,question):
 
-    llm = TogetherWrapper(model = "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free",temperature = 0.0)
+    llm = TogetherWrapper(model = "meta-llama/Llama-3.2-3B-Instruct-Turbo",temperature = 0.0)
 
     template = """
     You are a retrieval-focused assistant designed to help extract relevant information from formal documents such as insurance policies, contracts, and official correspondence.

@@ -23,9 +23,11 @@ def responses(query_context_map):
     The context you receive may vary per query — always assume that it is the only information available.
 
     Always aim for precision, factual consistency, and groundedness.
+
+    Output response should be not more than two lines
     """
     prompt = ChatPromptTemplate.from_template(template)
-    wrap = TogetherWrapper(model = "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free",temperature = 0)
+    wrap = TogetherWrapper(model = "meta-llama/Llama-3.2-3B-Instruct-Turbo",temperature = 0)
     llm = LangchainWrapper(wrap)
 
     answers = []

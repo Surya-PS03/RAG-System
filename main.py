@@ -34,45 +34,41 @@ class QueryRequest(BaseModel):
     documents: str
     questions: List[str]
 
+def download_file_streaming(url, file_path):
+    with requests.get(url, stream=True) as r:
+        r.raise_for_status()
+        with open(file_path, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                f.write(chunk)
 
 @app.post("/hackrx/run")
-def response(request: QueryRequest, token: str = Depends(authorize)):
+async def response(request: QueryRequest, token: str = Depends(authorize)):
     documents_url = request.documents
     root = "hackrx/files"
     os.makedirs(root,exist_ok = True)
 
-    #sending get request to the document url
-    try:
-        resp = requests.get(documents_url)
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = f"Url is not working: {str(e)}")
-    
     #extracting filename from url
     url_split = urlsplit(documents_url) 
     doc_path = url_split.path
     filename = os.path.basename(doc_path)
 
-    #Creating a filepath and writing in it
+
+
+        #Creating a filepath and writing in it
     try:
         file_path = os.path.join(root,filename)
-
-        with open(file_path,'wb') as f:
-            f.write(resp.content)
+        download_file_streaming(documents_url,file_path)
     except:
         raise HTTPException(status_code=500,detail = "Can't extract the file content")
 
     questions = request.questions
     #RAG procedure
-    parsed_doc = parsing.parser(file_path,filename)
+    parsed_doc = await parsing.parser(file_path,filename)
     chunks = chunking.chunker(parsed_doc)
     db = vectorizing.vectorize(chunks)
     contexts = {question: retrieving.retrieve(db = db,question=question) for question in questions}
     answers = output.responses(contexts)
     return {"answers":answers}
-
-@app.get("/hackrx/run")
-def run_info():
-    return {"message": "Use POST with Authorization: Bearer <token> to access this endpoint"}
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
